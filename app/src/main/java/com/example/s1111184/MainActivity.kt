@@ -71,7 +71,6 @@ fun TopAppBarWithMenu(navController: androidx.navigation.NavController) {
 
     TopAppBar(
         title = {
-            // 使用 Image 替代 Text
             Image(
                 painter = painterResource(id = R.drawable.maria),
                 contentDescription = "App you see",

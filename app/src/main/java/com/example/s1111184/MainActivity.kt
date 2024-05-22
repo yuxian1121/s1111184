@@ -4,12 +4,21 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateDp
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.updateTransition
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -29,6 +38,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -104,29 +114,109 @@ fun TopAppBarWithMenu(navController: androidx.navigation.NavController) {
     )
 }
 
+
+/*第二題*/
+
+//@Composable
+//fun FirstScreen(navController: NavController) {
+//    Box(
+//        contentAlignment = Alignment.TopStart, // 将文本對齊到屏幕左上角
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .padding(top = 60.dp)
+//    ) {
+//        Text(
+//            text = "簡介",
+//            color = Color.Blue
+//        )
+//    }
+//}
+//
+//
+//@Composable
+//fun SecondScreen(navController: NavController) {
+//    Box(
+//        contentAlignment = Alignment.TopStart, // 将文本对齐到屏幕左上角
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .padding(top = 60.dp)
+//    ) {
+//        Text(
+//            text = "主要機構",
+//            color = Color.Red
+//        )
+//    }
+//}
+
+
 @Composable
 fun FirstScreen(navController: NavController) {
-    Box(
-        contentAlignment = Alignment.TopStart, // 将文本對齊到屏幕左上角
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 60.dp)
-    ) {
-        Text(
-            text = "簡介",
-            color = Color.Blue
-        )
+    var isOriginalState by remember { mutableStateOf(true) }
+
+    // 使用Column封裝內容，使按鈕緊跟圖片
+    Column(modifier = Modifier.fillMaxSize()) {
+
+        AnimatedVisibility(
+            visible = isOriginalState,
+            enter = fadeIn(animationSpec = tween(3000)),
+            exit = fadeOut(animationSpec = tween(3000)),
+            modifier = Modifier.padding(top = 70.dp)
+        ) {
+            Box(contentAlignment = Alignment.TopStart, modifier = Modifier.fillMaxWidth()) {
+                Text(text = "瑪利亞基金會服務總覽", color = Color.Blue)
+            }
+
+            Box(
+                contentAlignment = Alignment.TopStart,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 20.dp) // 根据实际情况调整距离
+            ) {
+                Image(painter = painterResource(id = R.drawable.service), contentDescription = "瑪利亞基金會相關圖片")
+            }
+        }
+
+        AnimatedVisibility(
+            visible = !isOriginalState,
+            enter = fadeIn(animationSpec = tween(3000)),
+            exit = fadeOut(animationSpec = tween(3000)),
+            modifier = Modifier.padding(top = 70.dp)
+        ) {
+            Box(contentAlignment = Alignment.TopStart, modifier = Modifier.fillMaxWidth()) {
+                Text(text = "關於App作者", color = Color.Blue)
+            }
+
+            Box(
+                contentAlignment = Alignment.TopStart,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 20.dp) // 根据实际情况调整距离
+            ) {
+                Image(painter = painterResource(id = R.drawable.my_selfpicture), contentDescription = "這邊放自己的圖片")
+            }
+        }
+
+        AnimatedVisibility(
+            visible = true,
+            enter = fadeIn(animationSpec = tween(3000)),
+            exit = fadeOut(animationSpec = tween(3000)),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 30.dp) // 根据实际情况调整距离
+        ) {
+            Button(onClick = { isOriginalState = !isOriginalState }) {
+                Text(text = if (isOriginalState) "作者: 資管系陳語賢" else "服務總覽")
+            }
+        }
     }
 }
-
-
 @Composable
 fun SecondScreen(navController: NavController) {
     Box(
         contentAlignment = Alignment.TopStart, // 将文本对齐到屏幕左上角
         modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 60.dp)
+            .fillMaxSize() // 让 Box 填充屏幕
+            .padding(top = 70.dp) // 仅在顶部添加20dp的内边距，让文字往下移动
     ) {
         Text(
             text = "主要機構",
